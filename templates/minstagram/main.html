@@ -183,14 +183,16 @@
 <!-- 바디 영역 -->
 <div class="main_body">
   <div class="left_body">
-    <div class="border feed_box">
+      <!-- 여기서부터 피드 박스-->
+      {% for feed in feeds %}
+      <div class="border feed_box">
       <div class="feed_name">
         <div class="profile_box">
-          <img class="profile_img" src="https://item.kakaocdn.net/do/c953abdde9169fee070a797b592dad48f604e7b0e6900f9ac53a43965300eb9a">
+          <img class="profile_img" src="{{ feed.profile_image }}">
         </div>
-        <span class="feed_name_txt"> mxx_jj.02 </span>
+        <span class="feed_name_txt"> {{ feed.user_id }} </span>
       </div>
-      <img class="feed_img" src="https://images.unsplash.com/photo-1612977423916-8e4bb45b5233?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8JUVDJUEwJTlDJUVDJUEzJUJDJUVCJThGJTg0fGVufDB8fDB8fHww">
+      <img class="feed_img" src="{{ feed.image }}">
 
       <div class="feed_icon">
         <div>
@@ -211,54 +213,17 @@
         </div>
       </div>
       <div class="feed_like">
-        <p class="feed_txt"> <b>좋아요 15개</b></p>
+        <p class="feed_txt"> <b>좋아요 {{ feed.like_count }}개</b></p>
       </div>
       <div class="feed_content">
-        <p class="feed_txt"> <b> mxx_jj.02 </b> 제주도 바다~! 날씨요정과 함께 여유로운 제주 바다 실컷 즐기고 오기 성공!</p>
+        <p class="feed_txt"> <b> {{ feed.user_id }} </b> {{ feed.content }}</p>
       </div>
       <div class="feed_reply">
         <span class="feed_txt"> <b> binn11 </b> 날씨요정 인정이지?!?! 즐거웠댜>< 또 놀러가쟈~!! </span>
         <span class="feed_txt"> <b> znil55 </b> 제주도 부럽다</span>
       </div>
     </div>
-    <div class="border feed_box">
-      <div class="feed_name">
-        <div class="profile_box">
-          <img class="profile_img" src="https://item.kakaocdn.net/do/c953abdde9169fee070a797b592dad48f604e7b0e6900f9ac53a43965300eb9a">
-        </div>
-        <span class="feed_name_txt"> mxx_jj.02 </span>
-      </div>
-      <img class="feed_img" src="https://mblogthumb-phinf.pstatic.net/MjAxODEyMTdfMTQ1/MDAxNTQ1MDE0NzAzNjU4.rMkmS1CqZBTbcF4biNWDWgsXa6RxNOYOMQ-_weJnPOwg.ah60kKFBQCGFCtFGrxN2-1fr_p--02EHTN0jD7NB5pEg.PNG.tide1101/3.png?type=w800">
-
-      <div class="feed_icon">
-        <div>
-          <span class="material-icons-outlined">
-            favorite_border
-          </span>
-          <span class="material-icons-outlined">
-            mode_comment
-          </span>
-          <span class="material-icons-outlined">
-            send
-          </span>
-        </div>
-        <div>
-          <span class="material-icons-outlined">
-            turned_in_not
-          </span>
-        </div>
-      </div>
-      <div class="feed_like">
-        <p class="feed_txt"> <b>좋아요 40개</b></p>
-      </div>
-      <div class="feed_content">
-        <p class="feed_txt"> <b> mxx_jj.02 </b> 낭만 가득 방콕 여행...먹거리부터 사원, 분위기 하나하나 모두 만족스러웠다</p>
-      </div>
-      <div class="feed_reply">
-        <span class="feed_txt"> <b> duckkx98 </b> 다시 돌아갈래...ㅠ 마사지까지 넘 알찼다!!</span>
-        <span class="feed_txt"> <b> swimm88 </b> 담에 나랑도 가쟈!!  </span>
-      </div>
-    </div>
+      {%  endfor %}
   </div>
   <div class="right_body">
     <div class="feed_name" style="justify-content: space-between">
