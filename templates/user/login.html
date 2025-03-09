@@ -22,25 +22,52 @@
          <div style="font-weight:bold; line-height: 20px; text-align: center; color: rgba(142,142,142,1); margin: 0 25px 20px; padding-bottom: 10px"> 친구들의 사진과 동영상을 보려면 가입하세요</div>
          <div>
             <div class="form-floating mb-3 floating_form">
-                <input type="email" class="form-control" style="font-size: 14px; height: 24px" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingEmail" style="font-size: 14px;padding: 4px 10px" class="floating_label">Email Address</label>
+                <input type="email" class="form-control" style="font-size: 14px; height: 24px" id="input_email" placeholder="name@example.com">
+                <label for="input_email" style="font-size: 14px;padding: 4px 10px" class="floating_label">Email Address</label>
             </div>
          </div>
          <div>
             <div class="form-floating mb-3 floating_form">
-                <input type="password" class="form-control" style="font-size: 14px; height: 24px" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingEmail" style="font-size: 14px;padding: 4px 10px" class="floating_label">Password</label>
+                <input type="password" class="form-control" style="font-size: 14px; height: 24px" id="input_password" placeholder="name@example.com">
+                <label for="input_password" style="font-size: 14px;padding: 4px 10px" class="floating_label">Password</label>
             </div>
          </div>
-         <button class="btn btn-primary" style="width: 100%"> 로그인 </button>
+         <button id = "login_button" class="btn btn-primary" style="width: 100%"> 로그인 </button>
     </div>
     <div style="padding: 20px;text-align: center;border:solid 1px rgba(219, 219, 219, 1); width: 300px; height:70px; margin-top: 30px; background: white">
-        <div> 계정이 없으신가요? <a href="join">가입하기</a></div>
+        <div> 계정이 없으신가요? <a href="{% url 'join' %}">가입하기</a></div>
     </div>
 </div>
 
 <!-- Optional JavaScript; choose one of the two! -->
+<script>
+    $('#login_button').click(function () {
 
+        let email = $('#input_email').val();
+        let password = $('#input_password').val();
+
+        $.ajax({
+            url: "/user/login",
+            data: {
+                email : email,
+                password: password
+            },
+            method: "POST",
+            success: function (data) {
+                console.log("성공");
+                alert("로그인 성공");
+                location.replace('/main/');
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function() {
+                console.log("완료");
+                location.reload();
+            }
+        })
+    });
+</script>
 <!-- Option 1: Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"

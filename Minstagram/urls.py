@@ -23,7 +23,7 @@ from content.views import Main, UploadFeed
 from .settings import MEDIA_ROOT, MEDIA_URL
 
 urlpatterns = [
-    path('', Main.as_view()),
+    path('main/', Main.as_view(), name = 'main'),
     # path('content/upload', UploadFeed.as_view())
     path('content/', include('content.urls')),
     path('user/', include('user.urls'))
