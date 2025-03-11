@@ -22,7 +22,7 @@ class Join(APIView):
                             nickname=nickname,
                             name=name,
                             password=make_password(password),
-                            profile_image = 'default_profile_image.jpg')
+                            profile_image = 'default_profile.jpg')
 
         return Response(status=200)
 
