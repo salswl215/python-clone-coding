@@ -78,8 +78,6 @@
         font-size: 14px;
     }
 
-
-
     .feed_icon{
         padding: 5px 5px 0px 5px;
         display: flex;
@@ -206,9 +204,9 @@
               <div class="dropdown">
                 <a href="#" role="button" id="dropdownMenuLink"
                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <div class="box" style="width: 29px; height: 31px">
-                        <img class="profile"
-                             src="https://item.kakaocdn.net/do/c953abdde9169fee070a797b592dad48f604e7b0e6900f9ac53a43965300eb9a"
+                    <div class="profile_box" style="width: 29px; height: 31px">
+                        <img class="profile_img"
+                             src="{% get_media_prefix %}{{ user.profile_image }}"
                              style="width: 100%; height: 100%;">
                     </div>
                 </a>
@@ -230,44 +228,59 @@
   <div class="left_body">
       <!-- 여기서부터 피드 박스-->
       {% for feed in feeds %}
-      <div class="border feed_box">
-      <div class="feed_name">
-        <div class="profile_box">
-          <img class="profile_img" src="{% get_media_prefix %}{{ feed.profile_image }}">
-        </div>
-        <span class="feed_name_txt"> {{ feed.user_id }} </span>
-      </div>
-      <img class="feed_img" src="{% get_media_prefix %}{{ feed.image }}">
-
-      <div class="feed_icon">
-        <div>
-          <span class="material-icons-outlined">
-            favorite_border
-          </span>
-          <span class="material-icons-outlined">
-            mode_comment
-          </span>
-          <span class="material-icons-outlined">
-            send
-          </span>
-        </div>
-        <div>
-          <span class="material-icons-outlined">
-            turned_in_not
-          </span>
-        </div>
-      </div>
-      <div class="feed_like">
-        <p class="feed_txt"> <b>좋아요 {{ feed.like_count }}개</b></p>
-      </div>
-      <div class="feed_content">
-        <p class="feed_txt"> <b> {{ feed.user_id }} </b> {{ feed.content }}</p>
-      </div>
-      <div class="feed_reply">
-        <span class="feed_txt"> <b> binn11 </b> 날씨요정 인정이지?!?! 즐거웠댜>< 또 놀러가쟈~!! </span>
-        <span class="feed_txt"> <b> znil55 </b> 제주도 부럽다</span>
-      </div>
-    </div>
+          <div class="border feed_box">
+              <div class="feed_name">
+                  <div class="profile_box">
+                    <img class="profile_img" src="{% get_media_prefix %}{{ feed.profile_image }}">
+                  </div>
+                    <span class="feed_name_txt"> {{ feed.nickname }} </span>
+              </div>
+          
+              <div> <img class="feed_img" src="{% get_media_prefix %}{{ feed.image }}"> </div>
+        
+              <div class="feed_icon">
+                  <div>
+                      <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}" 
+                            class="favorite material-icons-outlined" 
+                            style="color: red;cursor: pointer">{% if feed.is_liked %}
+                                    favorite{% else %}favorite_border{% endif %}</span>
+                  </div>
+                  <div>
+                      <span id="bookmark_{{ feed.id }}" feed_id="{{ feed.id }}" class="bookmark material-icons-outlined" style="cursor: pointer">
+                            {% if feed.is_marked %}
+                            bookmark
+                            {% else %}
+                            bookmark_border
+                            {% endif %}
+                      </span>
+                  </div>
+              </div>
+              
+              <div style="margin: 0 10px;text-align: left;font-size: 14px"> 춘식이 <b>외 {{ feed.like_count }}명</b>이
+                    좋아합니다.
+              </div>
+              
+              <div class="feed_content">
+                <p class="feed_txt"> <b> {{ feed.nickname }} </b> {{ feed.content }}</p>
+              </div>
+              
+              <div id="reply_list_{{ feed.id }}">
+                {% for reply in feed.reply_list %}
+                    <div style="margin: 0 10px;text-align: left;font-size: 14px">
+                        <b>{{ reply.nickname }}</b> {{ reply.reply_content }}</div>
+                {% endfor %}
+              </div>
+          
+              <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px gray ">
+                  <input id="reply_{{ feed.id }}" type="text" class="form-control"
+                       style="box-shadow: none; border: none; outline: none; font-size: 14px"
+                       placeholder="댓글 달기..">
+                  <div feed_id="{{ feed.id }}" class="upload_reply"
+                     style="width: 50px;color: cornflowerblue; font-weight: bold; font-size: 14px">
+                    게시
+                  </div>
+              </div>
+          </div>
       {%  endfor %}
   </div>
   <div class="right_body">
@@ -275,7 +288,7 @@
       <div style="display: flex; align-items: center; ">
         <div class="big_profile_box">
           <img class="profile_img"
-               src="https://item.kakaocdn.net/do/c953abdde9169fee070a797b592dad48f604e7b0e6900f9ac53a43965300eb9a">
+               src="{% get_media_prefix %}{{ user.profile_image }}">
         </div>
         <div class="name_content">
           <span class="feed_name_txt"> {{ user.nickname }} </span>
@@ -429,6 +442,100 @@
 
 <!-- jquery 부분 -->
 
+    $(".bookmark").click(function (event) {
+        let feed_id = event.target.attributes.getNamedItem('feed_id').value;
+        let bookmark_id = event.target.id;
+        let bookmark_text = $.trim($('#' + bookmark_id).html());
+        if (bookmark_text == 'bookmark') {
+            $('#' + bookmark_id).html('bookmark_border');
+        } else {
+            $('#' + bookmark_id).html('bookmark');
+        }
+
+        $.ajax({
+            url: "/content/bookmark",
+            data: {
+                feed_id: feed_id,
+                bookmark_text: bookmark_text
+            },
+            method: "POST",
+            success: function (data) {
+                console.log("성공");
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("완료");
+            }
+        });
+    });
+
+    $(".favorite").click(function (event) {
+        let feed_id = event.target.attributes.getNamedItem('feed_id').value;
+        let favorite_id = event.target.id;
+        console.log(favorite_id);
+        let favorite_text = $.trim($('#' + favorite_id).html());
+        console.log(favorite_text);
+        if (favorite_text == 'favorite') {
+            $('#' + favorite_id).html('favorite_border');
+        } else {
+            $('#' + favorite_id).html('favorite');
+        }
+
+        $.ajax({
+            url: "/content/like",
+            data: {
+                feed_id: feed_id,
+                favorite_text: favorite_text
+            },
+            method: "POST",
+            success: function (data) {
+                console.log("성공");
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("완료");
+            }
+        });
+    });
+
+    $(".upload_reply").click(function (event){
+        let feed_id = event.target.attributes.getNamedItem('feed_id').value;
+        let reply_id = 'reply_' + feed_id;
+        let reply_content = $('#' + reply_id).val();
+
+        if (reply_content.length <= 0) {
+            alert("댓글을 입력하세요");
+            return 0;
+        }
+
+        $.ajax({
+            url: "/content/reply",
+            data: {
+                feed_id: feed_id,
+                reply_content: reply_content
+            },
+            method: "POST",
+            success: function (data) {
+                console.log("성공");
+                alert("댓글 성공");
+                $("#reply_list_" + feed_id).append("<div style='margin: 0 20px;text-align: left;font-size: 14px'><b>{{ user.nickname }}</b> " + reply_content + "</div>")
+                {#location.replace('/main');#}
+
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("완료");
+                $('#' + reply_id).val('');
+            }
+        });
+    })
+
     $(".modal_close").click(function (){
         $('#first_modal').css({
             display: 'none'
@@ -455,16 +562,12 @@
         let file = files[0];
         let image = files[0].name;
         let content = $('#input_feed_content').val();
-        let user_id = "{{ user.nickname }}";
-        let profile_image = "{{ user.profile_image }}";
 
         let fd = new FormData();
 
         fd.append('file', file);
         fd.append('image', image);
         fd.append('content', content);
-        fd.append('user_id', user_id);
-        fd.append('profile_image', profile_image);
 
         $.ajax({
             url: "/content/upload",
