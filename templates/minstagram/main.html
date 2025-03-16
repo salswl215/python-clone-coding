@@ -187,59 +187,6 @@
         padding: 10px;
         text-align : center;
     }
-
-    .modal_title{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        font-weight: bold;
-        font-size: 20px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.18);
-    }
-
-    .modal_title_side{
-        margin: 5px;
-        flex: 0 0 40px;
-        text-align: center;
-    }
-
-    .modal_image_upload{
-        outline: 2px dashed black ;
-        outline-offset:-10px;
-        text-align: center;
-        transition: all .15s ease-in-out;
-        width:780px;
-        height: 548px;
-    }
-
-    .modal_image_upload_content{
-        outline: 2px dashed black ;
-        outline-offset:-10px;
-        text-align: center;
-        transition: all .15s ease-in-out;
-        width:500px;
-        height: 548px;
-    }
-
-    .modal_image_content{
-        display: flex;
-        flex-direction: row;
-    }
-
-    .modal_content_write{
-        display: flex;
-        flex-direction: column;
-        border-left: 1px solid rgba(0, 0, 0, 0.18);;
-    }
-
-    .feed_content_textarea{
-        resize: none;
-        width: 294px;
-        border: none;
-    }
-
-
-
     </style>
 
 </head>
@@ -423,51 +370,53 @@
 </div>
 
 <!-- 첫번째 모달 -->
-<div id="modal_add_feed" class="modal_overlay">
+<div id="first_modal" class="modal_overlay">
     <div class="modal_window">
-        <div class="modal_title">
-            <div class="modal_title_side"></div>
-            <div> 새 게시물 </div>
-            <div class="modal_title_side">
-                <span id="close_modal" class="close_modal material-icons-outlined">
-                    close
-                </span>
+        <div style="display: flex; flex-direction: row; justify-content: space-between">
+            <div style="width: 40px; background: gray">
+
+            </div>
+            <div>
+                새 이미지 업로드
+            </div>
+            <div style="width: 40px; background: gray">
+                <span class="modal_close material-icons-outlined">close</span>
             </div>
         </div>
-        <div class="modal_image_upload">
+
+        <div class="img_upload_space" style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px">
+
         </div>
     </div>
 </div>
 
 <!-- 두번째 모달 -->
-<div id="modal_add_feed_content" class="modal_overlay">
+<div id="second_modal" class="modal_overlay">
     <div class="modal_window">
-        <div class="modal_title">
-            <div class="modal_title_side"></div>
-            <div style="margin: 5px"> 새 게시물 </div>
-            <div class="modal_title_side">
-                <span id="close_modal" class="close_modal material-icons-outlined">
-                    close
-                </span>
-            </div>
-        </div>
-        <div class="modal_image_content">
-            <div id="input_image" class="modal_image_upload_content">
+        <div style="display: flex; flex-direction: row; justify-content: space-between">
+            <div style="width: 40px; background: gray">
 
             </div>
-            <div class="modal_content_write">
-                <div class="feed_name">
-                    <div class="profile_box">
-                        <img id="input_profile_image" class="profile_img" src="https://item.kakaocdn.net/do/c953abdde9169fee070a797b592dad48f604e7b0e6900f9ac53a43965300eb9a">
-                    </div>
-                    <span id="input_user_id" class="feed_name_txt"> mxx_jj.02 </span>
+            <div>
+                새 이미지 업로드
+            </div>
+            <div style="width: 40px; background: gray">
+                <span class="modal_close material-icons-outlined">close</span>
+            </div>
+        </div>
+
+        <div style="border-top: solid 1px gray;display: flex; flex-direction: row;margin-top: 10px">
+            <div class="img_upload_space" style="width: 500px; height: 540px;">
+
+            </div>
+            <div style="border-left: solid 1px gray">
+                <div>
+                    <textarea id="input_feed_content" class="form-control" style="width: 276px; height: 400px"
+                              id="exampleFormControlTextarea1" rows="5"></textarea>
                 </div>
-                <div style="height: 440px">
-                    <textarea id="input_content" class="feed_content_textarea form-control col-sm-5" rows="10" placeholder="설명을 입력하세요..."></textarea>
-                </div>
-                <div style="width: 100%; text-align: center">
-                    <button id="button_write_feed" type="button" class="btn btn-primary" style="width: 268px"> 공유하기</button>
-                </div>
+                <button id="feed_create_button" type="button" class="btn btn-primary" style="width: 100%">
+                    공유하기
+                </button>
             </div>
         </div>
 
@@ -477,99 +426,42 @@
 
 <!-- Optional JavaScript; choose one of the two! -->
 <script>
-    
-    let files;
-    // 모달 띄우기 코드
-    const modal = document.getElementById("modal_add_feed");
-    const buttonAddFeed = document.getElementById("nav_bar_add_box");
-    buttonAddFeed.addEventListener("click", e => {
-        modal.style.top = window.pageYOffset + 'px'; // top을 이용해 시작 y위치를 바꿔줌
-        modal.style.display = "flex";
-        document.body.style.overflowY = "hidden"; // 스크롤 없애기
-    });
-
-    // 모달 닫기 코드
-    const buttonCloseModal = document.getElementById("close_modal");
-    buttonCloseModal.addEventListener("click", e => {
-        modal.style.display = "none";
-        document.body.style.overflowY = "visible";});
 
 <!-- jquery 부분 -->
+
+    $(".close_modal").click(function (){
+        $('#first_modal').css({
+            display: 'none'
+        })
+        $('#second_modal').css({
+            display: 'none'
+        })
+    });
+
+    $('#nav_bar_add_box').click(function () {
+        $('#first_modal').css({
+            display: 'flex'
+        });
+
+        $(document.body).css({
+            overflow: 'hidden'
+        });
+
+    });
     
-    $('.modal_image_upload')
-        .on("dragover", dragOver)
-        .on("dragleave", dragOver)
-        .on("drop", uploadFiles);
-
-    function dragOver(e){
-        e.stopPropagation();
-        e.preventDefault();
-
-        if (e.type == "dragover") {
-            $(e.target).css({
-                "background-color": "black",
-                "outline-offset": "-20px"
-            });
-        } else {
-            $(e.target).css({
-                "background-color": "white",
-                "outline-offset": "-10px"
-            });
-        }
-    }
-
-    function uploadFiles(e){
-        e.stopPropagation();
-        e.preventDefault();
-        
-        e.dataTransfer = e.originalEvent.dataTransfer;
-        files = e.target.files || e.dataTransfer.files;
-
-        if (files.length > 1) {
-            alert('하나의 이미지만 올려주세요');
-            return;
-        }
-
-        if (files[0].type.match(/image.*/)) {
-
-            $('#modal_add_feed').css({
-                display: 'none'
-            })
-            $('#modal_add_feed_content').css({
-                display: 'flex'
-            })
-
-            $('.modal_image_upload_content').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat" : "no-repeat",
-                "background-position" : "center"
-            });
-        }else{
-            alert('이미지가 아닙니다.');
-            return;
-        }
-
-    }
-    
-    $('#button_write_feed').click(function () {
+    $('#feed_create_button').click(function () {
         alert("공유하기 눌렀다.");
-        
+
         let file = files[0];
-        let image = files[0].name
-        let content = $('#input_content').val();
-        let user_id = $('#input_user_id').text();
-        let profile_image = $('#input_profile_image').attr('src');
-        
+        let image = files[0].name;
+        let content = $('#input_feed_content').val();
+
         let fd = new FormData();
-        
+
         fd.append('file', file);
         fd.append('image', image);
         fd.append('content', content);
-        fd.append('user_id', user_id);
-        fd.append('profile_image', profile_image);
-        
+
         $.ajax({
             url: "/content/upload",
             data: fd,
@@ -582,12 +474,68 @@
             error: function (request, status, error) {
                 console.log("에러");
             },
-            complete: function() {
+            complete: function () {
                 console.log("완료");
-                location.reload();
+                location.replace("/main");
             }
-        })
+        });
     });
+
+    $('.img_upload_space')
+        .on("dragover", dragOver)
+        .on("dragleave", dragOver)
+        .on("drop", uploadFiles);
+
+    function dragOver(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (e.type == "dragover") {
+            $(e.target).css({
+                "background-color": "black",
+                "outline-offset": "-20px"
+            });
+        } else {
+            $(e.target).css({
+                "outline-offset": "-10px"
+            });
+        }
+    }
+
+    function uploadFiles(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        e.dataTransfer = e.originalEvent.dataTransfer; //2
+        files = e.target.files || e.dataTransfer.files;
+        console.log("뭔가 파일을 올렸네??" + files[0].name);
+        if (files.length > 1) {
+            alert('하나만 올려라.');
+            return;
+        }
+
+        if (files[0].type.match(/image.*/)) {
+
+            $('#first_modal').css({
+                display: 'none'
+            });
+            $('#second_modal').css({
+                display: 'flex'
+            });
+
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+                "outline": "none",
+                "background-size": "100%",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        } else {
+            alert('이미지가 아닙니다.');
+            return;
+        }
+
+    }
 
 
 
