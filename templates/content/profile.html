@@ -291,6 +291,42 @@
 
 <!-- jquery 부분 -->
 
+    $("#button_feed_list").click(function (){
+        $('#feed_list').css({
+            display : 'flex'
+        });
+        $('#like_feed_list').css({
+            display : 'none'
+        });
+        $('#bookmark_feed_list').css({
+            display : 'none'
+        });
+    });
+
+    $("#button_feed_like_list").click(function (){
+        $('#feed_list').css({
+            display : 'none'
+        });
+        $('#like_feed_list').css({
+            display : 'flex'
+        });
+        $('#bookmark_feed_list').css({
+            display : 'none'
+        });
+    });
+    
+    $("#button_feed_bookmark_list").click(function (){
+        $('#feed_list').css({
+            display : 'none'
+        });
+        $('#like_feed_list').css({
+            display : 'none'
+        });
+        $('#bookmark_feed_list').css({
+            display : 'flex'
+        });
+    });
+
     $(".modal_close").click(function (){
         $('#first_modal').css({
             display: 'none'
