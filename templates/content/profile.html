@@ -19,7 +19,7 @@
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
     <title>Hello, world!</title>
-    
+
     <style>
         .box {
             width: 150px;
@@ -284,7 +284,7 @@
 
 <!-- jquery 부분 -->
 
-    $(".close_modal").click(function (){
+    $(".modal_close").click(function (){
         $('#first_modal').css({
             display: 'none'
         })
@@ -303,19 +303,23 @@
         });
 
     });
-    
+
     $('#feed_create_button').click(function () {
         alert("공유하기 눌렀다.");
 
         let file = files[0];
         let image = files[0].name;
         let content = $('#input_feed_content').val();
+        let user_id = "{{ user.nickname }}";
+        let profile_image = "{{ user.profile_image }}";
 
         let fd = new FormData();
 
         fd.append('file', file);
         fd.append('image', image);
         fd.append('content', content);
+        fd.append('user_id', user_id);
+        fd.append('profile_image', profile_image);
 
         $.ajax({
             url: "/content/upload",
@@ -391,7 +395,7 @@
         }
 
     }
-    
+
     $('#button_profile_upload').click(function (){
         $('#input_fileupload').click();
     });
